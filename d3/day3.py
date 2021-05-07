@@ -1,4 +1,4 @@
-from functools import reduce
+import math
 
 def build_map(file_name, horizontal):
     """
@@ -52,7 +52,7 @@ def challenge_2():
     y_moves = [1, 1, 1, 1, 2]
     for n in range(len(x_moves)):
         answers.append(challenge_1(build_map("d3/day3_input.txt", 100), y_moves[n], x_moves[n]))
-    return reduce(lambda x, y: x*y, answers)
+    return math.prod(answers)
 
 
 if __name__ == '__main__':
