@@ -1,4 +1,4 @@
-def process(fileName):
+def process(file_name):
     """
     Purpose:
         Process a txt file containing password details, and return a list of all processed passwords
@@ -12,10 +12,10 @@ def process(fileName):
             [3] : potential password  
     """
 
-    inFile = open(fileName, "r")
-    passwordList = []
+    in_file = open(file_name, "r")
+    password_list = []
     # Process the values from each password value
-    for line in inFile:
+    for line in in_file:
         password = []
         line = line.split() # split where [0] = '#-#'
                             #               [1] = 'a:'
@@ -29,10 +29,10 @@ def process(fileName):
         code = line[2]
         password.append(code)
 
-        passwordList.append(password)
-    return passwordList
+        password_list.append(password)
+    return password_list
 
-def checkPasswords1(listPassword):
+def check_passwords1(list_password):
     """
     Purpose:
         Checks a list of passwords to see if the match Day 2 criteria.
@@ -48,13 +48,13 @@ def checkPasswords1(listPassword):
         Number of passwords in the list that meet the criteria
     """
     total = 0
-    for password in listPassword:
-        letterCount = password[3].count(password[2])
-        if (password[0] <= letterCount) and (letterCount <= password[1]):
+    for password in list_password:
+        letter_count = password[3].count(password[2])
+        if (password[0] <= letter_count) and (letter_count <= password[1]):
             total += 1
     return total
 
-def checkPasswords2(listPassword):
+def check_passwords2(list_password):
     """
      Purpose:
         Checks a list of passwords to see if the match Day 2 - Part 2criteria.
@@ -71,25 +71,22 @@ def checkPasswords2(listPassword):
 
     """
     total = 0
-    for password in listPassword:
-        firstPos = False
-        secondPos = False
+    for password in list_password:
+        first_pos, second_pos = False, False
         # convert positions to indices
         pos1 = password[0] - 1
         pos2 = password[1] - 1
 
         # if valid index, and letter at position is same as given letter then change to True
-        if pos1 < len(password[3]):
-            if password[3][pos1] == password[2]:
-                firstPos = True
-        if pos2 < len(password[3]):
-            if password[3][pos2] == password[2]:
-                secondPos = True
+        if pos1 < len(password[3]) and password[3][pos1] == password[2]:
+                first_pos = True
+        if pos2 < len(password[3]) and password[3][pos2] == password[2]:
+                second_pos = True
         
         # If at least one position is true
-        if (firstPos or secondPos):
+        if (first_pos or second_pos):
             # If both positions are True though, do nothing
-            if (firstPos and secondPos):
+            if (first_pos and second_pos):
                 total += 0
             # If only one position was true, then add 1
             else:
@@ -98,5 +95,5 @@ def checkPasswords2(listPassword):
     
 
 if __name__ == "__main__":
-    print(checkPasswords1(process("d2/day2.txt")))
-    print(checkPasswords2(process("d2/day2.txt")))
+    print(check_passwords1(process("d2/day2.txt")))
+    print(check_passwords2(process("d2/day2.txt")))
