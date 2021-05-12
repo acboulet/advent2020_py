@@ -2,7 +2,7 @@
 from os import name
 
 
-def process(file_name):
+def process_1(file_name):
     """
     Purpose:
         Process .txt file to check each unique character in a given group of passengers.
@@ -42,10 +42,46 @@ def challenge_1(group_list):
         total += len(group)
     return total
 
+def process_2(file_name):
+    in_file = open(file_name, "r")
+    all_groups = [] # list of everyone on plane
+    group = [] # String consisting of all question characters
+    for line in in_file:
+        line = line.strip()
+        if line == "": # if an empty line, then add the check for common chars and reset group
+            all_groups.append(all_answers(group))
+            group = []
+        else:
+            group.append(line)
+    all_groups.append(all_answers(group)) # Add last group of chars because no empty line at end
+    return all_groups
+
+def all_answers(people_group):
+    everyone = {}
+    count = 0 # number of people in the group
+    for person in people_group:
+        count += 1
+        for char in person:
+            if not (char in everyone): #if not already in dictionary
+                everyone[char] = 1
+            else:
+                everyone[char] += 1
+    code = ""
+    for key in everyone:
+        if everyone[key] == count:
+            code += key
+    return code
+
+
+
 if __name__ == "__main__":
-    all_groups = process("d6/day6_input.txt")
+    unique_groups = process_1("d6/day6_example2.txt")
+    sum_total = challenge_1(unique_groups)
+
+    common_total = challenge_1(process_2("d6/day6_input.txt"))
+    print(common_total)
     
-    sum_total = challenge_1(all_groups)
-    print(sum_total)
+
+
 
     
