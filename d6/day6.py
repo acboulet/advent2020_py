@@ -43,6 +43,15 @@ def challenge_1(group_list):
     return total
 
 def process_2(file_name):
+    """
+    Purpose:
+        Process .txt file to check each common character in a given group of passengers.
+        Groups of passengers are seperated by empty lines.
+    Pre:
+        :param file_name: name of .txt file
+    Return:
+        List of common characters where each group of passengers is a unique string
+    """
     in_file = open(file_name, "r")
     all_groups = [] # list of everyone on plane
     group = [] # String consisting of all question characters
@@ -57,6 +66,14 @@ def process_2(file_name):
     return all_groups
 
 def all_answers(people_group):
+    """
+    Purpose:
+        Helper function for process_2 which checks a group of passengers for all common characters
+    Pre:
+        :param people_group: Group of passengers
+    Return:
+        String with each character that is common to all passengers in group
+    """
     everyone = {}
     count = 0 # number of people in the group
     for person in people_group:
