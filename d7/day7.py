@@ -93,11 +93,57 @@ def list_of_gold(dict_bag, search_bag):
                 list_gold.append(bag)
     return list_gold
 
+def bags_stored(dict_bag):
+    """
+    Purpose:
+        Determines how many and which bags can be stored in "shiny gold" bag
+    Pre:
+        :param dict_bag: Output from dict_tree
+    Return:
+        Dictionary where key is bag number, and value is the number of bags stored in a single gold bag
+    """
+    counted_bags = {} #key is bag name, value is number of bags
+    def stored_helper(bag):
+        """
+        Purpose:
+            Helper function for bags_stored()
+        Pre:
+            :param bag: [0] : number of this type of bag that can be stored
+                        [1] : bag that can be stored
+        """
+        if bag[1] == 'none':
+            return
+        else:
+            potential_bags = dict_bag[bag[1]]
+            for n in range(len(potential_bags)):
+                bag = potential_bags[n]
+                if bag[1] in counted_bags:
+                    counted_bags[bag[1]] += int(bag[0])
+                else:
+                    counted_bags[bag[1]] = int(bag[0])
+                
+                for i in range(int(bag[0])):
+                    stored_helper(bag)
+    stored_helper([0, "shiny gold"])
+    return counted_bags
 
 
-if __name__ == "__main__":
-    bag_list = process_1("d7/day7_input.txt")
+
+
+def challenge_1(file_name):
+    bag_list = process_1(file_name)
     org_list = dict_tree(bag_list)
     gold_bags = find_path(org_list)
-    print(gold_bags)
+    output = f"Number of total bags is: {gold_bags}"
+    print(output)
+
+def challenge_2(file_name):
+    bag_list = process_1(file_name)
+    org_list = dict_tree(bag_list)
+    result = sum(bags_stored(org_list).values())
+    print(f"Number of bags that can be stored in gold bag: {result}")
+
+if __name__ == "__main__":
+    challenge_1("d7/day7_input.txt")
+    challenge_2("d7/day7_input.txt")
 
