@@ -41,35 +41,44 @@ def infinite_tracker(directions):
         step = directions[current_step]
     return accumulator
 
-def program_repair(directions):
+def program_movement(directions):
+    repaired = False
     accumulator = 0
     current_step = 0
     step = directions[current_step]
-    while (current_step < len(directions)):
-        repaired = False
-        repaired = try_repair(step)
-        def try_repair(step):
-            fixed = False
-            repaired_step = step.copy()
-            if repaired_step[0] == "jmp":
-                repaired_step[0] = "nop"
-            elif repaired_step[0] == "nop":
-                repaired_step[0] = "jmp"
-
-            
-            return fixed
-        while(not repaired):            
-            if step[0] == "acc":
-                accumulator += step[1]
-                current_step += 1
-            elif step[0] == "jmp":
-                current_step += step[1]
-            elif step[0] == "nop":
-                current_step += 1
-            step[2] = True
+    # While the spot has not been visited, and not repaired
+    while (not step[2] and not repaired):        
+        if step[0] == "acc":
+            accumulator += step[1]
+            current_step += 1
+        elif step[0] == "jmp":
+            current_step += step[1]
+        elif step[0] == "nop":
+            current_step += 1
+        step[2] = True
+        if current_step == len(directions): # Meaning that we have stepped outside of the list
+            repaired = True
+        else:
             step = directions[current_step]
-        print(step)
-    return accumulator
+        
+    # if not repaired, and has found an infinite loop then return 0 as a failure
+    if step[2] and not repaired:
+        return 0
+    else:
+        return accumulator
+
+def program_repair(directions):
+    # Try to change each step in the list of directions until you get one that doesn't end in an inifinite loop
+    for n in range(0,len(directions)):
+        # Create a new copy of the directions, and modify the current step
+        direction_copy = process("d8/day8_input.txt")
+        if direction_copy[n][0] == "jmp":
+            direction_copy[n][0] = "nop"
+        elif direction_copy[n][0] == "nop":
+            direction_copy[n][0] = "jmp"
+        result = program_movement(direction_copy)
+        if result > 0:
+            return result
 
 def challenge_1(directions):
     print(infinite_tracker(directions))
@@ -80,4 +89,4 @@ def challenge_2(directions):
 if __name__ == "__main__":
     directions = process("d8/day8_example.txt")
     challenge_1(directions)
-    challenge_2(directions)
+    challenge_2(process("d8/day8_input.txt"))
