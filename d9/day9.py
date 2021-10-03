@@ -46,8 +46,30 @@ def decode_XMAS(cypher):
         # adjust options selection
         left_c += 1
         right_c += 1
-                
+
+def contiguous_sum(target, cypher):
+    """
+    Purpose:
+        Find a list of continous numbers that equal the target identified in the cypher
+    Return:
+        Sum of the smallest and largest values in that list
+    """
+    left_c = 0
+    right_c = 1
+    while sum(cypher[left_c:right_c]) != target:
+        while sum(cypher[left_c:right_c]) < target:
+            # print(cypher[left_c:right_c])
+            right_c += 1
+        # If the list is found, then break the loop
+        if sum(cypher[left_c:right_c]) == target:
+            break
+        # If the sum becomes too large, reset the values
+        left_c += 1
+        right_c = left_c + 1
+    return (min(cypher[left_c:right_c]) + max(cypher[left_c:right_c]))
+
 
 if __name__ == "__main__":
     print(process("d9/d9_input.txt"))
     print(decode_XMAS(process("d9/d9_example.txt")))
+    print(contiguous_sum(decode_XMAS(process("d9/d9_example.txt")), process("d9/d9_example.txt")))
